@@ -28,7 +28,16 @@ export RDECK_JVM="-server -Djava.security.auth.login.config=/etc/rundeck/<%= nod
 	-Drundeck.server.serverDir=/var/lib/rundeck \
 	-Drdeck.projects=/var/rundeck/projects \
 	-Drdeck.runlogs=/var/lib/rundeck/logs \
+	-Drundeck.jetty.connector.forwarded=true \
 	-Drundeck.config.location=/etc/rundeck/rundeck-config.groovy"
+
+export RDECK_SSL_OPTS="-Djavax.net.ssl.trustStore=<%= node['rundeck']['ssl']['truststore'] %> \
+	-Djavax.net.ssl.trustStoreType=jks \
+	-Djava.protocol.handler.pkgs=com.sun.net.ssl.internal.www.protocol"
+
+<% if node['rundeck']['ssl']['enable'] -%>
+export RDECK_JVM="$RDECK_JVM $RDECK_SSL_OPTS"
+<% end -%>
 
 #
 # JVM optimizations
