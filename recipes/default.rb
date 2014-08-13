@@ -170,7 +170,7 @@ cookbook_file '/etc/rundeck/realm.properties' do
 	source 'realm.properties'
 	owner 'rundeck'
 	group 'rundeck'
-	mode 00644
+	mode 00600
 	action :create_if_missing
 end
 

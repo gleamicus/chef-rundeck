@@ -33,6 +33,7 @@ default['rundeck']['rpm_cfg_checksum']  = '80a0b336173f9e70c8700aab073b0bd96620e
 # Framework configuration
 default['rundeck']['node_name']         = node.name
 default['rundeck']['hostname']          = node['fqdn']
+default['rundeck']['bind_address']      = '0.0.0.0'
 default['rundeck']['port']              = 4440
 default['rundeck']['url']               = "http://#{node['rundeck']['hostname']}:#{node['rundeck']['port']}"
 default['rundeck']['log4j_port']        = 4435

@@ -69,7 +69,7 @@ action :update do
 
 	new_auth_line = create_auth_line(new_resource.name, new_resource.password, new_resource.encryption, new_resource.roles)
 
-	unless ::File.read(::File.join('/', 'etc','rundeck','realm.properties')).match(/^#{new_auth_line}: $/)
+	unless ::File.read(::File.join('/', 'etc','rundeck','realm.properties')).match(/^#{new_resource.name}: $/)
 		new_resource.updated_by_last_action(false)
 		Chef::Log.info("Rundeck user #{new_resource.name} already up to date")
 	else

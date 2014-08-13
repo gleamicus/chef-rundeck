@@ -9,9 +9,9 @@ export RDECK_BASE
 JAVA_CMD=java
 
 if [ ! -z $JAVA_HOME ]; then
-    PATH=$PATH:$JAVA_HOME/bin
-    export PATH
-    JAVA_CMD=$JAVA_HOME/bin/java
+	PATH=$PATH:$JAVA_HOME/bin
+	export PATH
+	JAVA_CMD=$JAVA_HOME/bin/java
 fi
 
 export CLI_CP=$(find /var/lib/rundeck/cli -name \*.jar -printf %p:)
@@ -23,6 +23,8 @@ export RDECK_JVM="-server -Djava.security.auth.login.config=/etc/rundeck/<%= nod
 	-Drdeck.base=/var/lib/rundeck \
 	-Drundeck.server.configDir=/etc/rundeck \
 	-Dserver.datastore.path=/var/lib/rundeck/data \
+	-Dserver.http.host=<%= node['rundeck']['bind_address'] %> \
+	-Dserver.http.port=<%= node['rundeck']['port'] %> \
 	-Drundeck.server.serverDir=/var/lib/rundeck \
 	-Drdeck.projects=/var/rundeck/projects \
 	-Drdeck.runlogs=/var/lib/rundeck/logs \
@@ -32,41 +34,41 @@ export RDECK_JVM="-server -Djava.security.auth.login.config=/etc/rundeck/<%= nod
 # JVM optimizations
 #
 RDECK_JVM="$RDECK_JVM \
-  -Xms<%= node['rundeck']['java']['allocated_memory'] %> \
-  -Xmx<%= node['rundeck']['java']['allocated_memory'] %> \
-  -Xss<%= node['rundeck']['java']['thread_stack_size'] %> \
-  -Djava.net.preferIPv4Stack=true \
-  -XX:+UseParNewGC \
-  -XX:+UseConcMarkSweepGC \
-  -XX:+CMSParallelRemarkEnabled \
-  -XX:CMSInitiatingOccupancyFraction=75 \
-  -XX:+UseCMSInitiatingOccupancyOnly \
-  -XX:+UseTLAB \
-  -XX:+CMSClassUnloadingEnabled \
-  -XX:MaxTenuringThreshold=1 \
-  -XX:SurvivorRatio=8 \
-  -XX:+UseCompressedOops \
-  -XX:MaxPermSize=<%= node['rundeck']['java']['perm_gen_size'] %>"
+	-Xms<%= node['rundeck']['java']['allocated_memory'] %> \
+	-Xmx<%= node['rundeck']['java']['allocated_memory'] %> \
+	-Xss<%= node['rundeck']['java']['thread_stack_size'] %> \
+	-Djava.net.preferIPv4Stack=true \
+	-XX:+UseParNewGC \
+	-XX:+UseConcMarkSweepGC \
+	-XX:+CMSParallelRemarkEnabled \
+	-XX:CMSInitiatingOccupancyFraction=75 \
+	-XX:+UseCMSInitiatingOccupancyOnly \
+	-XX:+UseTLAB \
+	-XX:+CMSClassUnloadingEnabled \
+	-XX:MaxTenuringThreshold=1 \
+	-XX:SurvivorRatio=8 \
+	-XX:+UseCompressedOops \
+	-XX:MaxPermSize=<%= node['rundeck']['java']['perm_gen_size'] %>"
 
 <% if node['rundeck']['java']['enable_jmx'] %>
 # JMX connector
 RDECK_JVM="$RDECK_JVM \
-  -Djava.rmi.server.hostname=127.0.0.1 \
-  -Dcom.sun.management.jmxremote \
-  -Dcom.sun.management.jmxremote.port=9000 \
-  -Dcom.sun.management.jmxremote.authenticate=false \
-  -Dcom.sun.management.jmxremote.ssl=false"
+	-Djava.rmi.server.hostname=127.0.0.1 \
+	-Dcom.sun.management.jmxremote \
+	-Dcom.sun.management.jmxremote.port=9000 \
+	-Dcom.sun.management.jmxremote.authenticate=false \
+	-Dcom.sun.management.jmxremote.ssl=false"
 <% end %>
 
 if test -t 0 -a -z "$RUNDECK_CLI_TERSE"
 then
-  RUNDECK_CLI_TERSE=true
-  export RUNDECK_CLI_TERSE
+	RUNDECK_CLI_TERSE=true
+	export RUNDECK_CLI_TERSE
 fi
 
 if test -n "$JRE_HOME"
 then
-   unset JRE_HOME
+	unset JRE_HOME
 fi
 
 umask 002
